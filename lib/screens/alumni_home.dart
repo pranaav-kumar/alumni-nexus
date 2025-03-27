@@ -66,7 +66,7 @@ class AlumniHomePageState extends State<AlumniHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.forum), label: 'Forum'),
           BottomNavigationBarItem(
             icon: Icon(Icons.track_changes),
-            label: 'Success Roadmap',
+            label: 'create success Roadmap',
           ),
         ],
       ),

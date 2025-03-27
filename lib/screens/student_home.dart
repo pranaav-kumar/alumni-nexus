@@ -68,8 +68,8 @@ class StudentHomePageState extends State<StudentHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.forum), label: 'Forum'),
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Mentors'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Events',
+            icon: Icon(Icons.track_changes),
+            label: 'Alumni roadmaps',
           ), // Add Events tab
         ],
       ),
