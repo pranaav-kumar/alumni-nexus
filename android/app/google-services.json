@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1002096663780",
+    "project_id": "alumni-association-platf0rm",
+    "storage_bucket": "alumni-association-platf0rm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002096663780:android:4ff85e4c4e52ace40ba0f1",
+        "android_client_info": {
+          "package_name": "com.example.new_one"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMQsl5wfHF2patr_NccRCbl0AGd-XJ4TI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
