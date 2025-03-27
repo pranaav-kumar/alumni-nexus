@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'alumniforum.dart';
 import 'student_connections.dart';
-import 'success_roadmap.dart';
+import 'success_roadmap.dart'; // Ensure this import points to the new implementation
 
 class AlumniHomePage extends StatefulWidget {
   const AlumniHomePage({super.key});
@@ -22,7 +22,7 @@ class AlumniHomePageState extends State<AlumniHomePage> {
       HomeContent(onFeatureSelected: _onItemTapped),
       const StudentConnectionsPage(),
       const ForumPage(),
-      const SuccessRoadmapPage(),
+      const SuccessRoadmapPage(), // Updated to use the new Success Roadmap page
     ];
   }
 
@@ -66,13 +66,15 @@ class AlumniHomePageState extends State<AlumniHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.forum), label: 'Forum'),
           BottomNavigationBarItem(
             icon: Icon(Icons.track_changes),
-            label: 'create success Roadmap',
+            label: 'Create Success Roadmap',
           ),
         ],
       ),
     );
   }
 }
+
+// The rest of the file remains the same as in the previous implementation
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key, required this.onFeatureSelected});

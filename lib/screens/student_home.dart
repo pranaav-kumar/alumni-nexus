@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'forum.dart';
 import 'mentor_find.dart';
 import 'mentor_connect.dart';
-import 'events.dart';
+import 'alumni_roadmaps.dart'; // Import the new Alumni Roadmaps page
 
 class StudentHomePage extends StatefulWidget {
   const StudentHomePage({super.key});
@@ -24,7 +24,7 @@ class StudentHomePageState extends State<StudentHomePage> {
       const MentorConnectPage(),
       const ForumPage(),
       const MentorPage(),
-      const EventsPage(), // Add EventsPage to the list
+      const AlumniRoadmapsPage(), // Updated to use the new Alumni Roadmaps page
     ];
   }
 
@@ -69,13 +69,15 @@ class StudentHomePageState extends State<StudentHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Mentors'),
           BottomNavigationBarItem(
             icon: Icon(Icons.track_changes),
-            label: 'Alumni roadmaps',
-          ), // Add Events tab
+            label: 'Alumni Roadmaps',
+          ),
         ],
       ),
     );
   }
 }
+
+// The rest of the file remains the same as in the previous implementation
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key, required this.onFeatureSelected});
@@ -166,12 +168,12 @@ class HomeContent extends StatelessWidget {
               ),
               _buildFeatureCard(
                 context,
-                'Events',
-                'Upcoming networking events',
-                Icons.event,
+                'Alumni Roadmaps',
+                'explore career paths',
+                Icons.track_changes,
                 Colors.green,
                 () {
-                  // Navigate to Events page
+                  onFeatureSelected(4); // Navigate to Events page
                 },
               ),
             ],
