@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'alumniforum.dart';
+import 'forum.dart';
 import 'student_connections.dart';
 import 'success_roadmap.dart'; // Ensure this import points to the new implementation
 
