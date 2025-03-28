@@ -61,7 +61,9 @@ class _ForumPageState extends State<ForumPage> {
       // Use email as fallback if name is not available
       String userName =
           userData['name'] ?? userData['email'] ?? 'Anonymous User';
-      String userType = userData['userType'] ?? 'User';
+
+      // Safely get user type with multiple fallbacks
+      String userType = _getUserType(userData, currentUser);
 
       // Prepare message data
       await _firestore.collection('forum_messages').add({
@@ -69,7 +71,7 @@ class _ForumPageState extends State<ForumPage> {
         'imageUrl': imageUrl,
         'senderId': currentUser.uid,
         'senderName': userName,
-        'senderType': userType,
+        'senderType': userType, // Always include this field
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -84,6 +86,21 @@ class _ForumPageState extends State<ForumPage> {
         ),
       );
     }
+  }
+
+  // Improved method to safely determine user type
+  String _getUserType(Map<String, dynamic> userData, User user) {
+    // Check multiple possible fields for user type
+    if (userData.containsKey('userType')) return userData['userType'];
+    if (userData.containsKey('role')) return userData['role'];
+
+    // Check email domain as a fallback
+    String email = user.email ?? '';
+    if (email.contains('@student.')) return 'Student';
+    if (email.contains('@alumni.')) return 'Alumni';
+
+    // Ultimate fallback
+    return 'User';
   }
 
   Future<void> _pickImage() async {
@@ -196,6 +213,11 @@ class _ForumPageState extends State<ForumPage> {
     // Determine if the message is from the current user
     bool isCurrentUser = message['senderId'] == _auth.currentUser?.uid;
 
+    // Add null checks for message fields
+    String senderName = message['senderName'] ?? 'Unknown Sender';
+    String senderType = message['senderType'] ?? 'User';
+    String messageText = message['text'] ?? '';
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
@@ -216,7 +238,7 @@ class _ForumPageState extends State<ForumPage> {
               children: [
                 // Sender Name and Type
                 Text(
-                  '${message['senderName']} (${message['senderType']})',
+                  '$senderName ($senderType)',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -225,8 +247,8 @@ class _ForumPageState extends State<ForumPage> {
                 ),
                 SizedBox(height: 4),
                 // Message Text
-                if (message['text'] != null && message['text'].isNotEmpty)
-                  Text(message['text'], style: TextStyle(fontSize: 16)),
+                if (messageText.isNotEmpty)
+                  Text(messageText, style: TextStyle(fontSize: 16)),
 
                 // Image Display
                 if (message['imageUrl'] != null)
