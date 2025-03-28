@@ -44,7 +44,9 @@ class SignInPageState extends State<SignInPage> {
       if (userType == 'Student') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => StudentHomePage()),
+          MaterialPageRoute(
+            builder: (context) => StudentHomePage(userName: ''),
+          ),
         );
       } else if (userType == 'Alumni') {
         Navigator.pushReplacement(

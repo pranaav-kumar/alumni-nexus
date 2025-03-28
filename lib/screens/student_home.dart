@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'forum.dart';
 import 'mentor_find.dart';
 import 'mentor_connect.dart';
-import 'alumni_roadmaps.dart'; // Import the new Alumni Roadmaps page
+import 'alumni_roadmaps.dart';
+import 'ProfilePager.dart'; // Import ProfilePage
 
 class StudentHomePage extends StatefulWidget {
-  const StudentHomePage({super.key});
+  final String userName;
+
+  const StudentHomePage({super.key, required this.userName});
 
   @override
   StudentHomePageState createState() => StudentHomePageState();
@@ -20,11 +24,11 @@ class StudentHomePageState extends State<StudentHomePage> {
   void initState() {
     super.initState();
     _pages = [
-      HomeContent(onFeatureSelected: _onItemTapped),
-      const MentorConnectPage(),
+      HomeContent(onFeatureSelected: _onItemTapped, userName: widget.userName),
+      MentorConnectPage(userName: widget.userName),
       const ForumPage(),
       const MentorPage(),
-      const AlumniRoadmapsPage(), // Updated to use the new Alumni Roadmaps page
+      const AlumniRoadmapsPage(),
     ];
   }
 
@@ -49,7 +53,24 @@ class StudentHomePageState extends State<StudentHomePage> {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              // Handle profile
+              // Get current user's ID
+              String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+              if (currentUserId != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(userId: currentUserId),
+                  ),
+                );
+              } else {
+                // Handle case where no user is logged in
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please log in to view profile'),
+                  ),
+                );
+              }
             },
           ),
         ],
@@ -59,7 +80,7 @@ class StudentHomePageState extends State<StudentHomePage> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
@@ -77,12 +98,15 @@ class StudentHomePageState extends State<StudentHomePage> {
   }
 }
 
-// The rest of the file remains the same as in the previous implementation
-
 class HomeContent extends StatelessWidget {
-  const HomeContent({super.key, required this.onFeatureSelected});
-
   final Function(int) onFeatureSelected;
+  final String? userName;
+
+  const HomeContent({
+    super.key,
+    required this.onFeatureSelected,
+    this.userName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +126,14 @@ class HomeContent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Welcome Back, Student!',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  Text(
+                    userName != null
+                        ? 'Welcome Back, $userName!'
+                        : 'Welcome Back!',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
@@ -115,17 +144,12 @@ class HomeContent extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
-
-          // Feature Options
           const Text(
             'Quick Access',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-
-          // Feature Cards
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
@@ -136,71 +160,44 @@ class HomeContent extends StatelessWidget {
               _buildFeatureCard(
                 context,
                 'Mentor Connect',
-                'Find the perfect alumni mentor',
-                Icons.connect_without_contact,
+                'Find your mentor',
+                Icons.people,
                 Colors.blue,
                 () {
-                  // Navigate to Mentor Connect
                   onFeatureSelected(1);
                 },
               ),
               _buildFeatureCard(
                 context,
                 'Forum',
-                'Discuss with peers and alumni',
+                'Engage in discussions',
                 Icons.forum,
                 Colors.orange,
                 () {
-                  // Navigate to Forum
                   onFeatureSelected(2);
                 },
               ),
               _buildFeatureCard(
                 context,
                 'Mentors',
-                'Explore available mentors',
+                'Explore mentorship',
                 Icons.school,
                 Colors.purple,
                 () {
-                  // Navigate to Mentors
                   onFeatureSelected(3);
                 },
               ),
               _buildFeatureCard(
                 context,
                 'Alumni Roadmaps',
-                'explore career paths',
+                'Career guidance',
                 Icons.track_changes,
                 Colors.green,
                 () {
-                  onFeatureSelected(4); // Navigate to Events page
+                  onFeatureSelected(4);
                 },
               ),
             ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // Recent Activities
-          const Text(
-            'Recent Activities',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          _buildActivityItem(
-            'New mentoring program opened',
-            'Join now to get industry expertise.',
-            '2 hours ago',
-          ),
-          _buildActivityItem(
-            'Alumni John posted in the forum',
-            'How to prepare for tech interviews?',
-            '1 day ago',
-          ),
-          _buildActivityItem(
-            'Career workshop next week',
-            'Register to secure your spot.',
-            '2 days ago',
           ),
         ],
       ),
@@ -244,23 +241,6 @@ class HomeContent extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildActivityItem(String title, String subtitle, String timeAgo) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: Text(
-          timeAgo,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
-        ),
-        onTap: () {
-          // Handle activity tap
-        },
       ),
     );
   }
