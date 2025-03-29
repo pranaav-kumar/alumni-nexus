@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'forum.dart';
 import 'student_connections.dart';
-import 'success_roadmap.dart'; // Ensure this import points to the new implementation
+import 'success_roadmap.dart';
+import 'profile_page.dart'; // Ensure this import points to the new implementation
 
 class AlumniHomePage extends StatefulWidget {
   const AlumniHomePage({super.key});
@@ -47,7 +48,12 @@ class AlumniHomePageState extends State<AlumniHomePage> {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              // Handle profile
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(userType: 'Alumni'),
+                ),
+              );
             },
           ),
         ],
