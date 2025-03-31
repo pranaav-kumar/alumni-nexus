@@ -3,6 +3,7 @@ import 'forum.dart';
 import 'student_connections.dart';
 import 'success_roadmap.dart';
 import 'profile_page.dart'; // Ensure this import points to the new implementation
+import 'mentor_opportunities.dart'; // Add this import
 
 class AlumniHomePage extends StatefulWidget {
   const AlumniHomePage({super.key});
@@ -172,11 +173,16 @@ class HomeContent extends StatelessWidget {
               _buildFeatureCard(
                 context,
                 'Mentor Opportunities',
-                'Become a mentor',
+                'View connection requests',
                 Icons.workspace_premium,
                 Colors.green,
                 () {
-                  // Future: Add mentor opportunities
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MentorOpportunities(),
+                    ),
+                  );
                 },
               ),
             ],
